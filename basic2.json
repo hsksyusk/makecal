@@ -1,0 +1,38 @@
+{
+	"basicSetting": {
+		"calender" : "Work",
+		"title" : "Shift",
+		"year" : 2012,
+		"month" : 12,
+		"dayOfWeeks" : ["Tue","Wed","Thu","Fri","Sat"],
+		"shift" : ["9:00","18:00"],
+		"alarms" : [
+			{
+				"action" : "email",
+				"duration" : 15,
+				"durationUnit" : "hour"
+			}
+		]
+	},
+	"irregulars" : [
+		{
+			"date" : 1,
+			"shift" : ["13:00", "22:00"],
+			"alarms" : [
+				{
+					"action" : "email",
+					"duration" : 15,
+					"durationUnit" : "hour"
+				}
+			]
+		},
+		{
+			"date" : 2,
+			"shift" : ["13:00", "22:00"]
+		},
+		{
+			"date" : 13,
+			"shift" : ["holiday"]
+		}
+	]
+}

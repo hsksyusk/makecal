@@ -1,0 +1,8 @@
+{
+	"calender" : "Work",
+	"title" : "Shift",
+	"year" : 2012,
+	"month" : 12,
+	"dayOfWeeks" : ["Tue","Wed","Thu","Fri","Sat"],
+	"shift" : "a"
+}

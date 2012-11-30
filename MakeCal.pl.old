@@ -1,0 +1,75 @@
+#!/Users/hsksyusk/perl5/perlbrew/perls/perl-5.14.2/bin/perl
+use strict;
+use warnings;
+use JSON 'decode_json';
+use DateTime;
+use Data::Dumper;
+
+# day of week table
+my %dayOfWeekMap = (
+	"Mon" => 1,
+	"Tue" => 2,
+	"Wed" => 3,
+	"Thu" => 4,
+	"Fri" => 5,
+	"Sat" => 6,
+	"Sun" => 7
+);
+
+# load setting file
+my $file = shift;
+
+my $json;
+{
+	local $/; #Enable 'slurp' mode
+	open my $fh, "<", $file;
+	$json = <$fh>;
+	close $fh;
+}
+my $data = decode_json($json);
+# warn Dumper $data;
+
+# make work days list
+my @workDayOfWeeks = map { $dayOfWeekMap{$_} } @{$data->{basicSetting}->{dayOfWeeks}};
+# warn Dumper @workDayOfWeeks;
+
+# make first date & last date
+my $date = DateTime->new(
+	time_zone => 'Asia/Tokyo',
+	year => $data->{basicSetting}->{year},
+	month => $data->{basicSetting}->{month},
+	day => 1
+);
+my $lastDate = DateTime->last_day_of_month(
+	time_zone => 'Asia/Tokyo',
+	year => $data->{basicSetting}->{year},
+	month => $data->{basicSetting}->{month}
+);
+
+# make iCalendar loop
+for ( 1 ; $date <= $lastDate; $date = $date->add( days => 1) ){
+	my $endFlag = 0;
+	print "date: ", $date->day, " wday: " . $date->wday . " - ";
+	# check irregular schedule
+	foreach my $irregular ( @{$data->{irregulars}} ){
+		warn Dumper $irregular;
+		if ( $irregular->{date} == $date->day ){
+			if ( $irregular->{shift}->[0] ne "holiday" ) {
+				print $irregular->{shift}->[0] . "-" . $irregular->{shift}->[1] . "\n";
+			} else { 
+				print "holiday\n";
+			}
+			$endFlag = 1;
+			last;
+		}
+	}
+	# if match irregular schedule, skip this loop
+	if ( $endFlag ) { next; }
+	# check basic schedule
+	if ( $date->wday ~~ \@workDayOfWeeks ){
+		print "weekday\n";
+	} else {
+		print "holiday\n";
+	}
+}
+
