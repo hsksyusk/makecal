@@ -12,9 +12,6 @@ use Data::ICal::Entry::Alarm::Email;
 use Date::ICal;
 
 my @dayOfWeeks = qw( Mon Tue Wed Thu Fri Sat Sun );
-my $calscale = 'GREGORIAN';
-my $timezone = 'Asia/Tokyo';
-my $offset = '-0900';
 
 # load setting file
 my $scheduleFile = $ARGV[0];
@@ -62,8 +59,8 @@ warn Dumper $shiftPattern;
 
 my $calendar = Data::ICal->new();
 $calendar->add_properties(
-	'CALSCALE'      => $calscale,
-	'X-WR-TIMEZONE' => $timezone,
+	'CALSCALE'      => 'GREGORIAN',
+	'X-WR-TIMEZONE' => 'Asia/Tokyo',
 );
 
 foreach my $schedule ( @schedules ){
@@ -80,7 +77,6 @@ foreach my $schedule ( @schedules ){
 		hour  => $shiftPattern->{$schedule->{shift}}->{startHour},
 		min   => $shiftPattern->{$schedule->{shift}}->{startMin},
 		sec => 0,
-		offset => $offset,
 	);
 	warn $shiftPattern->{$schedule->{shift}}->{startHour};
 	warn $shiftPattern->{$schedule->{shift}}->{startMin};
@@ -91,7 +87,6 @@ foreach my $schedule ( @schedules ){
 		hour  => $shiftPattern->{$schedule->{shift}}->{endHour},
 		min   => $shiftPattern->{$schedule->{shift}}->{endMin},
 		sec => 0,
-		offset => $offset,
 	);
 	$dtend->add('day') if $dtstart > $dtend;
 	warn Dumper $dtstart;
