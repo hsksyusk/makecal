@@ -1,4 +1,3 @@
-#!/Users/hsksyusk/perl5/perlbrew/perls/perl-5.14.2/bin/perl
 use strict;
 use warnings;
 use JSON 'decode_json';
@@ -14,11 +13,12 @@ use Date::ICal;
 my @dayOfWeeks = qw( Mon Tue Wed Thu Fri Sat Sun );
 my $calscale = 'GREGORIAN';
 my $timezone = 'Asia/Tokyo';
-my $offset = '-0900';
+#my $offset = '-0900';
 
 # load setting file
 my $scheduleFile = $ARGV[0];
 my $patternFile = $ARGV[1];
+my $icalFile = $ARGV[2];
 warn $scheduleFile;
 warn $patternFile;
 
@@ -80,7 +80,7 @@ foreach my $schedule ( @schedules ){
 		hour  => $shiftPattern->{$schedule->{shift}}->{startHour},
 		min   => $shiftPattern->{$schedule->{shift}}->{startMin},
 		sec => 0,
-		offset => $offset,
+	#	offset => $offset,
 	);
 	warn $shiftPattern->{$schedule->{shift}}->{startHour};
 	warn $shiftPattern->{$schedule->{shift}}->{startMin};
@@ -91,16 +91,20 @@ foreach my $schedule ( @schedules ){
 		hour  => $shiftPattern->{$schedule->{shift}}->{endHour},
 		min   => $shiftPattern->{$schedule->{shift}}->{endMin},
 		sec => 0,
-		offset => $offset,
+	#	offset => $offset,
 	);
 	$dtend->add('day') if $dtstart > $dtend;
-	warn Dumper $dtstart;
-	warn Dumper $dtend;
+	my $dtstart_ical = $dtstart->ical;
+	my $dtend_ical   = $dtend->ical;
+	$dtstart_ical =~ s/^(\d{8})Z/$1T000000Z/;
+	$dtend_ical   =~ s/^(\d{8})Z/$1T000000Z/;
+	warn Dumper $dtstart_ical;
+	warn Dumper $dtend_ical;
 	
 	$vevent->add_properties(
 		summary => "Shift $schedule->{shift}",
-		dtstart => $dtstart->ical,
-		dtend => $dtend->ical,
+		dtstart => $dtstart_ical,
+		dtend => $dtend_ical,
 	);
 
 

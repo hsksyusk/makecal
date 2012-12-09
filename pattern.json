@@ -28,5 +28,25 @@
 				"durationUnit" : "days"
 			}
 		]
+	},
+	"d": {
+		"shift" : ["10:00","19:00"],
+		"alarms" : [
+			{
+				"action" : "email",
+				"duration" : 15,
+				"durationUnit" : "hours"
+			}
+		]
+	},
+	"e": {
+		"shift" : ["8:00","17:00"],
+		"alarms" : [
+			{
+				"action" : "email",
+				"duration" : 15,
+				"durationUnit" : "hours"
+			}
+		]
 	}
 }
