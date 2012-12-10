@@ -1,4 +1,3 @@
-#!/Users/hsksyusk/perl5/perlbrew/perls/perl-5.14.2/bin/perl
 use strict;
 use warnings;
 use JSON 'decode_json';
